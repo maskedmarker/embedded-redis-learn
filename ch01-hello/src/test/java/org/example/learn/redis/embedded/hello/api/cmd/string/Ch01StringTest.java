@@ -1,5 +1,6 @@
-package org.example.learn.redis.embedded.hello.api.cmd;
+package org.example.learn.redis.embedded.hello.api.cmd.string;
 
+import org.example.learn.redis.embedded.hello.api.cmd.BaseStandaloneRedisServerTest;
 import org.example.learn.redis.embedded.util.ClassUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -177,7 +178,7 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
     }
 
     /**
-     * set/getset命令会覆盖原有的所有属性信息(包括TTL)
+     * set命令会覆盖原有的所有属性信息(包括TTL)
      */
     @Test
     public void test036() throws InterruptedException {
@@ -196,8 +197,6 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
 
         // 新的set命令会覆盖原有的所有属性信息(包括TTL)
         client.set(key, value + value);
-        // getset命令也会覆盖原有的所有属性信息(包括TTL)
-//        client.getSet(key, value + value);
 
         // 上一步的set操作导致ttl丢失,所以返回-1
         Long ttl2 = client.ttl(key);
@@ -210,5 +209,35 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
         Assert.assertNotNull(opResult2);
         Assert.assertEquals(value + value, opResult2);
+    }
+
+    /**
+     * set/getset命令会覆盖原有的所有属性信息(包括TTL)
+     */
+    @Test
+    public void test037() throws InterruptedException {
+        String key = "test:username";
+        String value = "zhangSan";
+        int secondsToExpire = 3;
+
+        client.del(key);
+        client.set(key, value);
+        Long opResult = client.expire(key, secondsToExpire);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult, ClassUtils.getClassName(opResult));
+
+        // returns the remaining time to live in seconds of a key that has an EXPIRE
+        Long ttl = client.ttl(key);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.TTL, key, value, ttl, ClassUtils.getClassName(ttl));
+        Thread.sleep(1000);
+
+        // getset命令也会覆盖原有的所有属性信息(包括TTL)
+        String opResult2 = client.getSet(key, value + value);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GETSET, key, value, opResult2, ClassUtils.getClassName(opResult2));
+
+        // 上一步的set操作导致ttl丢失,所以返回-1
+        Long ttl2 = client.ttl(key);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.TTL, key, value, ttl2, ClassUtils.getClassName(ttl2));
+        Assert.assertEquals(Long.valueOf(-1L), ttl2);
+        Assert.assertNotEquals(ttl, ttl2);
     }
 }
