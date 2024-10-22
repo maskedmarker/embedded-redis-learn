@@ -1,7 +1,7 @@
 package org.example.learn.redis.embedded.hello;
 
 
-import org.example.learn.redis.embedded.hello.constant.RedisConstants;
+import org.example.learn.redis.embedded.hello.constant.RedisServerConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class KeyApiTest {
         redisServer = new RedisServer(6379);
         redisServer.start();
 
-        jedis = new Jedis(RedisConstants.HOST, RedisConstants.PORT);
+        jedis = new Jedis(RedisServerConstants.HOST, RedisServerConstants.PORT);
     }
 
     @After
