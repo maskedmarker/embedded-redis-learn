@@ -177,7 +177,7 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
     }
 
     /**
-     * set命令会覆盖原有的所有属性信息(包括TTL)
+     * set/getset命令会覆盖原有的所有属性信息(包括TTL)
      */
     @Test
     public void test036() throws InterruptedException {
@@ -190,8 +190,20 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         Long opResult = client.expire(key, secondsToExpire);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult, ClassUtils.getClassName(opResult));
 
+        Long ttl = client.ttl(key);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.TTL, key, value, ttl, ClassUtils.getClassName(ttl));
+        Thread.sleep(1000);
+
         // 新的set命令会覆盖原有的所有属性信息(包括TTL)
         client.set(key, value + value);
+        // getset命令也会覆盖原有的所有属性信息(包括TTL)
+//        client.getSet(key, value + value);
+
+        // 上一步的set操作导致ttl丢失,所以返回-1
+        Long ttl2 = client.ttl(key);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.TTL, key, value, ttl2, ClassUtils.getClassName(ttl2));
+        Assert.assertEquals(Long.valueOf(-1L), ttl2);
+        Assert.assertNotEquals(ttl, ttl2);
 
         Thread.sleep((secondsToExpire + 2) * 1000);
         String opResult2 = client.get(key);
