@@ -19,12 +19,12 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String key = "test:username";
         String value = "zhangSan";
 
-        String opResult = jedis.set(key, value);
+        String opResult = client.set(key, value);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.SET, key, value, opResult, ClassUtils.getClassName(opResult));
 
-        Long opResult20 = jedis.del(key);
+        Long opResult20 = client.del(key);
         logger.info("命令: {} {}, 执行操作的结果: {}({})", Protocol.Command.DEL, key, opResult20, ClassUtils.getClassName(opResult20));
-        Long opResult21 = jedis.del(key);
+        Long opResult21 = client.del(key);
         logger.info("命令: {} {}, 执行操作的结果: {}({})", Protocol.Command.DEL, key, opResult21, ClassUtils.getClassName(opResult21));
     }
 
@@ -36,10 +36,10 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String key = "test:username";
         String value = "zhangSan";
 
-        jedis.del(key);
-        Long opResult = jedis.setnx(key, value);
+        client.del(key);
+        Long opResult = client.setnx(key, value);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.SETNX, key, value, opResult, ClassUtils.getClassName(opResult));
-        Long opResult2 = jedis.setnx(key, value);
+        Long opResult2 = client.setnx(key, value);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.SETNX, key, value, opResult2, ClassUtils.getClassName(opResult2));
     }
 
@@ -52,10 +52,10 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String key = "test:username";
         String value = "zhangSan";
 
-        jedis.del(key);
-        String opResult3 = jedis.set(key, value, new SetParams().nx());
+        client.del(key);
+        String opResult3 = client.set(key, value, new SetParams().nx());
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.SET, key, value, opResult3, ClassUtils.getClassName(opResult3));
-        String opResult4 = jedis.set(key, value, new SetParams().nx());
+        String opResult4 = client.set(key, value, new SetParams().nx());
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.SET, key, value, opResult4, ClassUtils.getClassName(opResult4));
     }
 
@@ -70,15 +70,15 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String value = "zhangSan";
         int secondsToExpire = 3;
 
-        jedis.del(key);
-        jedis.set(key, value);
-        Long opResult = jedis.expire(key, secondsToExpire);
+        client.del(key);
+        client.set(key, value);
+        Long opResult = client.expire(key, secondsToExpire);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult, ClassUtils.getClassName(opResult));
-        String opResult2 = jedis.get(key);
+        String opResult2 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
 
         Thread.sleep((secondsToExpire + 2) * 1000);
-        String opResult4 = jedis.get(key);
+        String opResult4 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult4, ClassUtils.getClassName(opResult4));
         Assert.assertNull(opResult4);
     }
@@ -93,12 +93,12 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String value = "zhangSan";
         int secondsToExpire = 3;
 
-        jedis.del(key);
-        String opResult = jedis.set(key, value, new SetParams().ex(secondsToExpire));
+        client.del(key);
+        String opResult = client.set(key, value, new SetParams().ex(secondsToExpire));
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.SET, key, value, opResult, ClassUtils.getClassName(opResult));
 
         Thread.sleep((secondsToExpire + 2) * 1000);
-        String opResult2 = jedis.get(key);
+        String opResult2 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
         Assert.assertNull(opResult2);
     }
@@ -116,12 +116,12 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.SECOND, secondsToExpire);
 
-        jedis.del(key);
-        jedis.set(key, value);
-        Long opResult = jedis.expireAt(key, now.getTimeInMillis() / 1000);
+        client.del(key);
+        client.set(key, value);
+        Long opResult = client.expireAt(key, now.getTimeInMillis() / 1000);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIREAT, key, value, opResult, ClassUtils.getClassName(opResult));
         Thread.sleep((secondsToExpire + 2) * 1000);
-        String opResult2 = jedis.get(key);
+        String opResult2 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
     }
 
@@ -137,15 +137,15 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.SECOND, secondsToExpire);
 
-        jedis.del(key);
-        jedis.set(key, value);
+        client.del(key);
+        client.set(key, value);
 
         // expireAt本身成功
-        Long opResult = jedis.expireAt(key, now.getTimeInMillis() / 1000);
+        Long opResult = client.expireAt(key, now.getTimeInMillis() / 1000);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIREAT, key, value, opResult, ClassUtils.getClassName(opResult));
         Assert.assertEquals(Long.valueOf(1L), opResult);
 
-        String opResult2 = jedis.get(key);
+        String opResult2 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
         Assert.assertNull(opResult2);
     }
@@ -159,19 +159,19 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String value = "zhangSan";
         int secondsToExpire = 3;
 
-        jedis.del(key);
-        jedis.set(key, value);
-        Long opResult = jedis.expire(key, secondsToExpire);
+        client.del(key);
+        client.set(key, value);
+        Long opResult = client.expire(key, secondsToExpire);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult, ClassUtils.getClassName(opResult));
-        String opResult2 = jedis.get(key);
+        String opResult2 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
 
         // 再次执行expire, 会更新TTL
-        Long opResult3 = jedis.expire(key, secondsToExpire * 10);
+        Long opResult3 = client.expire(key, secondsToExpire * 10);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult3, ClassUtils.getClassName(opResult3));
 
         Thread.sleep((secondsToExpire + 2) * 1000);
-        String opResult4 = jedis.get(key);
+        String opResult4 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult4, ClassUtils.getClassName(opResult4));
         Assert.assertNotNull(opResult4);
     }
@@ -185,16 +185,16 @@ public class Ch01StringTest extends BaseStandaloneRedisServerTest {
         String value = "zhangSan";
         int secondsToExpire = 3;
 
-        jedis.del(key);
-        jedis.set(key, value);
-        Long opResult = jedis.expire(key, secondsToExpire);
+        client.del(key);
+        client.set(key, value);
+        Long opResult = client.expire(key, secondsToExpire);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult, ClassUtils.getClassName(opResult));
 
         // 新的set命令会覆盖原有的所有属性信息(包括TTL)
-        jedis.set(key, value + value);
+        client.set(key, value + value);
 
         Thread.sleep((secondsToExpire + 2) * 1000);
-        String opResult2 = jedis.get(key);
+        String opResult2 = client.get(key);
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.GET, key, value, opResult2, ClassUtils.getClassName(opResult2));
         Assert.assertNotNull(opResult2);
         Assert.assertEquals(value + value, opResult2);

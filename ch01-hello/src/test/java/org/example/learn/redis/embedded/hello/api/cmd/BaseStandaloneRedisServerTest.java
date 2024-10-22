@@ -16,7 +16,7 @@ public class BaseStandaloneRedisServerTest {
 
     protected RedisServer redisServer;
 
-    protected Jedis jedis;
+    protected Jedis client;
 
     @Before
     public void setup() throws IOException {
@@ -28,7 +28,7 @@ public class BaseStandaloneRedisServerTest {
             redisServer.stop();
         }));
 
-        jedis = new Jedis(RedisServerConstants.HOST, RedisServerConstants.PORT);
+        client = new Jedis(RedisServerConstants.HOST, RedisServerConstants.PORT);
     }
 
     @After
