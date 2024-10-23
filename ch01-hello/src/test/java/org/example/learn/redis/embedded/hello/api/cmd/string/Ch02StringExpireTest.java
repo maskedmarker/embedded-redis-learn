@@ -9,6 +9,11 @@ import redis.clients.jedis.params.SetParams;
 
 import java.util.Calendar;
 
+/**
+ * The timeout will only be cleared by commands that delete or overwrite the contents of the key,
+ * including DEL, SET, GETSET and all the *STORE commands.
+ * 当key的value被修改时,ttl也会被clear
+ */
 public class Ch02StringExpireTest extends BaseStandaloneRedisServerTest {
 
     /**
@@ -190,5 +195,24 @@ public class Ch02StringExpireTest extends BaseStandaloneRedisServerTest {
         logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.TTL, key, value, ttl2, ClassUtils.getClassName(ttl2));
         Assert.assertEquals(Long.valueOf(-1L), ttl2);
         Assert.assertNotEquals(ttl, ttl2);
+    }
+
+    /**
+     * secondsToExpire 可以为负值
+     */
+    @Test
+    public void test04() {
+        String key = "test:username";
+        String value = "zhangSan";
+        int secondsToExpire = -3;
+
+        client.del(key);
+        client.set(key, value);
+        Long opResult = client.expire(key, secondsToExpire);
+        logger.info("命令: {} {} {}, 执行操作的结果: {}({})", Protocol.Command.EXPIRE, key, value, opResult, ClassUtils.getClassName(opResult));
+        Long ttl = client.ttl(key);
+        logger.info("命令: {} {}, 执行操作的结果: {}({})", Protocol.Command.TTL, key, ttl, ClassUtils.getClassName(ttl));
+        // secondsToExpire为负值,导致key立马失效,即不存在,当key不存在时,返回-2
+        Assert.assertEquals(Long.valueOf(-2L), ttl);
     }
 }
