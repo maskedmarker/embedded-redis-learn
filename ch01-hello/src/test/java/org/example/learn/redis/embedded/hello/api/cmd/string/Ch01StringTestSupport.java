@@ -1,15 +1,12 @@
 package org.example.learn.redis.embedded.hello.api.cmd.string;
 
-import org.example.learn.redis.embedded.hello.api.cmd.BaseStandaloneRedisServerTest;
+import org.example.learn.redis.embedded.hello.api.cmd.StandaloneRedisServerTestSupport;
 import org.example.learn.redis.embedded.util.ClassUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.params.SetParams;
 
-import java.util.Calendar;
-
-public class Ch01StringTest extends BaseStandaloneRedisServerTest {
+public class Ch01StringTestSupport extends StandaloneRedisServerTestSupport {
 
     /**
      * set

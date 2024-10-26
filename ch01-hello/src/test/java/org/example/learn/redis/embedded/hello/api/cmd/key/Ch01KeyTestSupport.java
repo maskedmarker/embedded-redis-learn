@@ -1,12 +1,12 @@
 package org.example.learn.redis.embedded.hello.api.cmd.key;
 
-import org.example.learn.redis.embedded.hello.api.cmd.BaseStandaloneRedisServerTest;
+import org.example.learn.redis.embedded.hello.api.cmd.StandaloneRedisServerTestSupport;
 import org.example.learn.redis.embedded.util.ClassUtils;
 import org.junit.Test;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.params.SetParams;
 
-public class Ch01KeyTest extends BaseStandaloneRedisServerTest {
+public class Ch01KeyTestSupport extends StandaloneRedisServerTestSupport {
 
     @Test
     public void test01() {

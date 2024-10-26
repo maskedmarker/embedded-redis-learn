@@ -1,17 +1,16 @@
 package org.example.learn.redis.embedded.hello.api.cmd.script;
 
-import org.example.learn.redis.embedded.hello.api.cmd.BaseStandaloneRedisServerTest;
+import org.example.learn.redis.embedded.hello.api.cmd.StandaloneRedisServerTestSupport;
 import org.example.learn.redis.embedded.util.ClassUtils;
 import org.example.learn.redis.embedded.util.ScriptConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Protocol;
-import redis.clients.jedis.params.SetParams;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-public class Ch01ScriptTest extends BaseStandaloneRedisServerTest {
+public class Ch01ScriptTestSupport extends StandaloneRedisServerTestSupport {
 
     /**
      * eval的返回结果类型跟lua脚本的返回结果有关系

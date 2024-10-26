@@ -10,9 +10,9 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
-public class BaseStandaloneRedisServerTest {
+public class StandaloneRedisServerTestSupport {
 
-    protected static final Logger logger = LoggerFactory.getLogger(BaseStandaloneRedisServerTest.class);
+    protected static final Logger logger = LoggerFactory.getLogger(StandaloneRedisServerTestSupport.class);
 
     protected RedisServer redisServer;
 

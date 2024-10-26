@@ -1,6 +1,6 @@
 package org.example.learn.redis.embedded.hello.api.cmd.string;
 
-import org.example.learn.redis.embedded.hello.api.cmd.BaseStandaloneRedisServerTest;
+import org.example.learn.redis.embedded.hello.api.cmd.StandaloneRedisServerTestSupport;
 import org.example.learn.redis.embedded.util.ClassUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import java.util.Calendar;
  * including DEL, SET, GETSET and all the *STORE commands.
  * 当key的value被修改时,ttl也会被clear
  */
-public class Ch02StringExpireTest extends BaseStandaloneRedisServerTest {
+public class Ch02StringExpireTestSupport extends StandaloneRedisServerTestSupport {
 
     /**
      * expire
