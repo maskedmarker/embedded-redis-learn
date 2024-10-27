@@ -10,6 +10,7 @@ public class RedisSentinelStarter {
     public static void main(String[] args) {
         RedisCluster cluster;
         Set<String> jedisSentinelHosts;
+
         //creates a cluster with 3 sentinels, quorum size of 2 and 3 replication groups, each with one master and one slave
         cluster = RedisCluster.builder().ephemeral().sentinelCount(3).quorumSize(2)
                 .replicationGroup("master1", 1)
@@ -17,8 +18,10 @@ public class RedisSentinelStarter {
                 .replicationGroup("master3", 1)
                 .build();
         cluster.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(cluster::stop));
 
         //retrieve ports on which sentinels have been started, using a simple Jedis utility class
         jedisSentinelHosts = JedisUtil.sentinelHosts(cluster);
+        System.out.println("jedisSentinelHosts = " + jedisSentinelHosts);
     }
 }

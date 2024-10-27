@@ -12,8 +12,12 @@
     <artifactId>ch01-hello</artifactId>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.kstyrc</groupId>
+            <artifactId>embedded-redis</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>it.ozimov</groupId>
             <artifactId>embedded-redis</artifactId>
         </dependency>
 
